@@ -29,7 +29,7 @@ sns.lineplot(ax=ax1, data=by_time.resample('W').sum())
 ax1.title.set_text('Coronavirus Effects over Time')
 ax1.set_ylabel('No of Individuals')
 
-
+#EVERYTHING BELOW IS WRONG DUE TO MY MISCONCEPTION - NUMBERS REPORTED ARE TOTALS, NOT CHANGES - WILL FIX BY FRIDAY
 by_country = cases[['Confirmed', 'Deaths', 'Recovered','Country/Region']].groupby(
         by=['Country/Region']).sum().sort_values(by='Confirmed', ascending=False)
 
