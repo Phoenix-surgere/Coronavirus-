@@ -31,29 +31,39 @@ ax1.set_ylabel('No of Individuals')
 
 #Correct way to get latest statistics!
 latest = cases[cases.ObservationDate == cases.ObservationDate.max()]
-
-#EVERYTHING BELOW IS WRONG DUE TO MY MISCONCEPTION - NUMBERS REPORTED ARE TOTALS, NOT CHANGES - WILL FIX BY FRIDAY
-by_country = cases[['Confirmed', 'Deaths', 'Recovered','Country/Region']].groupby(
-        by=['Country/Region']).sum().sort_values(by='Confirmed', ascending=False)
-
-
-fig, ax1 = plt.subplots()
+data=latest.groupby('Country/Region').sum().sort_values(by=['Confirmed'],
+                   ascending=False).iloc[0:20]
+fig, ax1 = plt.subplots(figsize=(10,6))
 plt.xticks(rotation=90)
-sns.barplot(x='Country/Region', y='Confirmed', data=by_country.reset_index().iloc[0:20])
+data_copy=data.stack().reset_index()
+data_copy.columns = ['Country', 'Status', 'No of Confirmed Cases']
+confirmed = data_copy[data_copy['Status'].str.contains("Confirmed")]
+sns.barplot(y='No of Confirmed Cases', x='Country',data=confirmed)
 ax1.title.set_text('Coronavirus Confirmed Patients by Country - TOP 20')
 plt.grid(True)
-ax1.set_ylim(0, 70000)
 
 
-by_both = cases[['Confirmed', 'Deaths', 'Recovered',
-                    'Country/Region', 'ObservationDate']].groupby(
-        by=['Country/Region', 'ObservationDate']).sum().sort_values(by='Confirmed', ascending=False)
+data=latest.groupby('Country/Region').sum().sort_values(by=['Deaths'],
+                   ascending=False).iloc[0:20]
+fig, ax1 = plt.subplots(figsize=(10,6))
+plt.xticks(rotation=90)
+data_copy=data.stack().reset_index()
+data_copy.columns = ['Country', 'Status', 'No of Dead']
+confirmed = data_copy[data_copy['Status'].str.contains("Deaths")]
+sns.barplot(y='No of Dead', x='Country',data=confirmed)
+ax1.title.set_text('Coronavirus Dead Patients by Country - TOP 20')
+plt.grid(True)
 
-data=by_country.reset_index().iloc[0:10]
-top_countries_by_confirmed = list(data['Country/Region'].iloc[0:10])
-
-by_both.loc[top_countries_by_confirmed].reset_index().pivot(
-  'ObservationDate','Country/Region', 'Confirmed').plot(title='Var1', grid=True)
 
 
-
+data=latest.groupby('Country/Region').sum().sort_values(by=['Recovered'],
+                   ascending=False).iloc[0:20]
+fig, ax1 = plt.subplots(figsize=(10,6))
+plt.xticks(rotation=90)
+data_copy=data.stack().reset_index()
+data_copy.columns = ['Country', 'Status', 'No of Recovered']
+confirmed = data_copy[data_copy['Status'].str.contains("Recovered")]
+sns.barplot(y='No of Recovered', x='Country',data=confirmed)
+ax1.title.set_text('Coronavirus Recovered Patients by Country - TOP 20')
+ax1.set_ylim([0,10000])
+plt.grid(True)
