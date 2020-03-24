@@ -67,3 +67,13 @@ sns.barplot(y='No of Recovered', x='Country',data=confirmed)
 ax1.title.set_text('Coronavirus Recovered Patients by Country - TOP 20')
 ax1.set_ylim([0,10000])
 plt.grid(True)
+
+by_time['Recovery_Rate'] = (by_time['Recovered'] / by_time['Confirmed'])*100
+by_time['Death_Rate'] = (by_time['Deaths'] /  by_time['Confirmed'])*100
+
+fig, ax1 = plt.subplots(figsize=(10,6))
+plt.xticks(rotation=90)
+plt.grid(True)
+sns.lineplot(ax=ax1, data=by_time[['Recovery_Rate', 'Death_Rate']])
+ax1.title.set_text('Coronavirus Derived Effects over Time')
+ax1.set_ylabel('% of Rates')
